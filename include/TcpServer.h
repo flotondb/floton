@@ -3,10 +3,10 @@
 
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 
 #ifdef _WIN32
-#pragma comment (lib, "Ws2_32.lib")
-#    undef UNICODE
+#    pragma comment (lib, "Ws2_32.lib")
 #    define WIN32_LEAN_AND_MEAN
 #    include <windows.h>
 #    include <winsock2.h>
@@ -15,16 +15,31 @@
 #    include <unistd.h> 
 #    include <sys/socket.h> 
 #    include <netinet/in.h> 
-#endif // !_WIN#2
+#endif // !_WIN32
+
+
+class TcpConnection {
+public:
+	TcpConnection(int fd);
+	~TcpConnection();
+private:
+	int _fd;
+};
+
+
+struct TcpServerConfig {
+	unsigned short port;
+	int backLogCount;
+	bool keepAlive;
+};
 
 
 class TcpServer {
 public:
-	TcpServer(unsigned short port): _port(port)
-	{}
+	TcpServer(const TcpServerConfig& config);
+	bool go();
 private:
-    unsigned short _port;
-    int _back_log;
+    TcpServerConfig _config;
     int _server_fd;
     sockaddr_in _address;
 };
