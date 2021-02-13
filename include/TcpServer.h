@@ -20,10 +20,20 @@
 
 class TcpConnection {
 public:
-	TcpConnection(int fd);
+	TcpConnection(int sd);
 	~TcpConnection();
+
+	size_t read(void* dest, size_t size)
+	{
+		return (size_t)recv(_sd, dest, size, 0);
+	}
+
+	bool write(const void* src, size_t size)
+	{
+		return send(_sd, src, size, 0) != -1;
+	}
 private:
-	int _fd;
+	int _sd;
 };
 
 
