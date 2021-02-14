@@ -20,7 +20,7 @@ public:
 	bool addConnection(tcp_socket_t sd);
 private:
 	void work();
-	void handle(tcp_socket_t sd);
+	bool handle(tcp_socket_t sd);
 
 	size_t _threadCount;
 	std::thread* _threads;

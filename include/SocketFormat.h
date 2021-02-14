@@ -14,6 +14,10 @@
 #    include <netinet/in.h> 
 #endif // !_WIN32
 
+/**
+ * Supports formatted reading and writing to TCP sockers primarily.
+ */
+
 // Socket type defines
 #ifdef _WIN32
      typedef SOCKET tcp_socket_t;
@@ -26,6 +30,8 @@ extern "C" {
 #endif
 
 extern int SocketFormat_write(tcp_socket_t sd, const void* src, size_t size);
+extern int SocketFormat_read(tcp_socket_t sd, void* dst, size_t size);
+extern int SocketFormat_close(tcp_socket_t sd);
 
 #ifdef __cplusplus
 }

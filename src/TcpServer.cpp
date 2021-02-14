@@ -24,6 +24,11 @@ bool TcpThreadPool::addConnection(int sd)
 	return true;
 }
 
+bool handle(tcp_socket_t sd)
+{
+	return true;
+}
+
 void work()
 {
 	while (true) {
