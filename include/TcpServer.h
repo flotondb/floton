@@ -28,13 +28,15 @@ private:
 	std::queue<tcp_socket_t> _conns;
 	std::condition_variable _cond;
 	mutable std::mutex _mut;
+
+	friend class TcpServer;
 };
 
 
 struct TcpServerConfig {
 	unsigned short port;
 	int backLogCount;
-	bool keepAlive;
+	size_t threadPoolSize;
 };
 
 
@@ -42,8 +44,11 @@ class TcpServer {
 public:
 	TcpServer(const TcpServerConfig& config);
 	bool go();
+	void stop();
 private:
     TcpServerConfig _config;
+    TcpThreadPool _tpool;
+    std::atomic<bool> _shuttingDown;
     int _server_fd;
     sockaddr_in _address;
 };

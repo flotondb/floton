@@ -26,6 +26,7 @@ bool TcpThreadPool::addConnection(int sd)
 
 bool handle(tcp_socket_t sd)
 {
+	// to do
 	return true;
 }
 
@@ -63,3 +64,48 @@ void TcpThreadPool::stop()
 		_threads[i].join();
 	}
 }
+
+
+TcpServer::TcpServer(const TcpServerConfig& config): _config(config),
+                                                     _tpool(config.threadPoolSize),
+                                                     _shuttingDown(false)
+{}
+
+void TcpServer::stop()
+{
+	_shuttingDown.store(true);
+	_tpool.stop();
+}
+
+bool TcpServer::go()
+{
+	    if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+	    	// error
+	        return false;
+	    }
+
+	    if (bind(_server_fd, (struct sockaddr *)&_address, sizeof(_address)) < 0) {
+	    	// error
+	        return false;
+	    }
+
+	    if (listen(_server_fd, _config.backLogCount) < 0) {
+	    	// error
+	        return false;
+	    }
+	    int address_length = sizeof(_address);
+	    _tpool.go();
+	    // Start loop for listening to accept calls
+	    while(!_shuttingDown.load()) {
+	        int new_socket = 0;
+	        if ((new_socket = accept(_server_fd, (struct sockaddr *)&_address,  
+	                       (socklen_t*)&address_length))<0) {
+
+	            return false;
+	        }
+	        _tpool.addConnection(new_socket);
+	    }
+	    
+	return true;
+}
+
