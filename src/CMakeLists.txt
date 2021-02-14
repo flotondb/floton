@@ -1,6 +1,7 @@
 # source cmake
 
 set(FLOTON_SOURCE_FILES
+    SocketFormat.c
     TcpServer.cpp
 )
 

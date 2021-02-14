@@ -4,36 +4,30 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <queue>
 
-#ifdef _WIN32
-#    pragma comment (lib, "Ws2_32.lib")
-#    define WIN32_LEAN_AND_MEAN
-#    include <windows.h>
-#    include <winsock2.h>
-#    include <ws2tcpip.h>
-#else // _WIN32
-#    include <unistd.h> 
-#    include <sys/socket.h> 
-#    include <netinet/in.h> 
-#endif // !_WIN32
+#include "SocketFormat.h"
 
 
-class TcpConnection {
+
+class TcpThreadPool {
 public:
-	TcpConnection(int sd);
-	~TcpConnection();
+	TcpThreadPool(size_t threadCount);
+	~TcpThreadPool();
 
-	size_t read(void* dest, size_t size)
-	{
-		return (size_t)recv(_sd, dest, size, 0);
-	}
-
-	bool write(const void* src, size_t size)
-	{
-		return send(_sd, src, size, 0) != -1;
-	}
+	void go();
+	void stop();
+	bool addConnection(tcp_socket_t sd);
 private:
-	int _sd;
+	void work();
+	void handle(tcp_socket_t sd);
+
+	size_t _threadCount;
+	std::thread* _threads;
+	std::atomic<bool> _shuttingDown;
+	std::queue<tcp_socket_t> _conns;
+	std::condition_variable _cond;
+	mutable std::mutex _mut;
 };
 
 
