@@ -24,13 +24,13 @@ bool TcpThreadPool::addConnection(int sd)
 	return true;
 }
 
-bool handle(tcp_socket_t sd)
+bool  TcpThreadPool::handle(tcp_socket_t sd)
 {
 	// to do
 	return true;
 }
 
-void work()
+void  TcpThreadPool::work()
 {
 	while (true) {
 		std::unique_lock<std::mutex> lock(_mut);
