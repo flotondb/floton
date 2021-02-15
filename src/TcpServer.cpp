@@ -1,9 +1,13 @@
 #include "TcpServer.h"
 #include <cassert>
+#include <cstdio>
+#include <cstring>
 
-TcpThreadPool::TcpThreadPool(size_t threadCount): _threadCount(threadCount),
+
+TcpThreadPool::TcpThreadPool(size_t threadCount,  SocketFormat_fn_ptr handlerFn): _threadCount(threadCount),
                                                   _threads(new std::thread[_threadCount]),
-                                                  _shuttingDown(false)
+                                                  _shuttingDown(false),
+                                                  _handlerFn(handlerFn)
                                                   {}
 
 TcpThreadPool::~TcpThreadPool()
@@ -26,8 +30,7 @@ bool TcpThreadPool::addConnection(int sd)
 
 bool  TcpThreadPool::handle(tcp_socket_t sd)
 {
-	// to do
-	return true;
+	return (bool)_handlerFn(sd);
 }
 
 void  TcpThreadPool::work()
@@ -69,7 +72,12 @@ void TcpThreadPool::stop()
 TcpServer::TcpServer(const TcpServerConfig& config): _config(config),
                                                      _tpool(config.threadPoolSize),
                                                      _shuttingDown(false)
-{}
+{
+	    std::memset(&_address, 0, sizeof(_address));
+	    _address.sin_family = AF_INET;
+	    _address.sin_addr.s_addr = INADDR_ANY;
+	    _address.sin_port = htons(_config.port);
+}
 
 void TcpServer::stop()
 {
@@ -107,5 +115,32 @@ bool TcpServer::go()
 	    }
 	    
 	return true;
+}
+
+TcpServerThread::TcpServerThread(const TcpServerConfig& config): _shuttingDown(false), 
+                                                                 _server(config)
+{}
+
+void TcpServerThread::go()
+{
+	_thread = std::thread([this]{
+		if(!this->_server.go())
+			this->stop();
+	});
+	if (_shuttingDown.load() && _thread.joinable()) {
+		_thread.join();
+	}
+}
+
+void TcpServerThread::stop()
+{
+	_shuttingDown.store(true);
+	_server.stop();
+}
+
+void TcpServerThread::join()
+{
+	if (_thread.joinable())
+		_thread.join();
 }
 

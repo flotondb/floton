@@ -25,6 +25,8 @@
      typedef int tcp_socket_t;
 #endif
 
+typedef int(*SocketFormat_fn_ptr)(tcp_socket_t);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +34,8 @@ extern "C" {
 extern int SocketFormat_write(tcp_socket_t sd, const void* src, size_t size);
 extern int SocketFormat_read(tcp_socket_t sd, void* dst, size_t size);
 extern int SocketFormat_close(tcp_socket_t sd);
+
+extern int SocketFormat_echo_text(tcp_socket_t sd);
 
 #ifdef __cplusplus
 }

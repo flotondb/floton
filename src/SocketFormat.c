@@ -18,3 +18,14 @@ extern int SocketFormat_close(tcp_socket_t sd)
 	return close(sd) == 0;
 #endif
 }
+
+#define FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE 256
+
+extern int SocketFormat_echo_text(tcp_socket_t sd)
+{
+	char msg[FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE];
+	return SocketFormat_read(sd, msg, FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE) &&
+	       SocketFormat_write(sd, msg, FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE);
+}
+
+#undef FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE
