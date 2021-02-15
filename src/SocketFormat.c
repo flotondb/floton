@@ -23,7 +23,7 @@ extern int SocketFormat_close(tcp_socket_t sd)
 
 extern int SocketFormat_echo_text(tcp_socket_t sd)
 {
-	char msg[FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE];
+	char msg[FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE] = {0};
 	return SocketFormat_read(sd, msg, FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE) &&
 	       SocketFormat_write(sd, msg, FLOTON_SOCKET_FORMAT_ECHO_TEXT_SIZE);
 }
