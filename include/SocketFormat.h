@@ -15,8 +15,13 @@
 #endif // !_WIN32
 
 /**
- * Supports formatted reading and writing to TCP sockers primarily.
+ * @file Supports formatted reading and writing to TCP sockers primarily.
  */
+
+#if !defined(FLOTON_ENDIAN_BIG) && !defined(FLOTON_ENDIAN_LITTLE)
+#    error "Endianess is not defined for this platform"
+#endif // !defined(FLOTON_ENDIAN_BIG) && !defined(FLOTON_ENDIAN_LITTLE)
+
 
 // Socket type defines
 #ifdef _WIN32
