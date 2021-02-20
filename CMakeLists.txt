@@ -16,6 +16,7 @@ include( CheckIncludeFile )
 # Checking for C++11 headers
 CHECK_INCLUDE_FILE_CXX("atomic" CPP_HAS_ATOMICS)
 CHECK_INCLUDE_FILE_CXX("thread" CPP_HAS_THREADS)
+CHECK_INCLUDE_FILE_CXX("cstdint" CPP_HAS_STDINT)
 
 if(NOT CPP_HAS_ATOMICS)
     message(FATAL_ERROR "atomics C++ header is not found, this is required for floton")
