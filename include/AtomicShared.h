@@ -27,7 +27,7 @@ public:
 	AtomicShared<T>& operator=(const AtomicShared<T>& other) noexcept
 	{
 		if (this != &other) {
-			if (_counter.load() != nullptr && _counter.load()->fetch_sub(1)) == 1 {
+			if (_counter.load() != nullptr && _counter.load()->fetch_sub(1) == 1) {
 				delete _ptr.load();
 				delete _counter.load();			
 			}

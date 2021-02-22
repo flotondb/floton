@@ -16,4 +16,6 @@ private:
 	FlotonShared* _objects;
 };
 
+typedef AtomicShared<FlotonRow> FlotonRowPtr;
+
 #endif // FLOTON_ROWS_H

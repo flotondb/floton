@@ -11,9 +11,10 @@ public:
 	};
 
 	virtual Type getType() const = 0;
+	virtual ~FlotonObject();
 };
 
-typedef AtomicShared<FlotonObject> FlotonShared;
+typedef AtomicShared<FlotonObject> FlotonObjectPtr;
 
 
 class FlotonBool : public FlotonObject {
@@ -27,7 +28,8 @@ public:
 	void setFalse() { _val.store(0); }
 	void flip()  { _val.fetch_xor(1); }
 	void opAnd(unsigned char b) { _val.fetch_and(b); }
-	void opOr(unsigned char b) { _val.fecth_or(b); }
+	void opOr(unsigned char b) { _val.fetch_or(b); }
+	void opXor(unsigned char b) { _val.fetch_xor(b); }
 private:
 	std::atomic<unsigned char> _val;
 };
