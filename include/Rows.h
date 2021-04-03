@@ -11,6 +11,16 @@ class FlotonRow {
 public:
 	FlotonRow(size_t width);
 	~FlotonRow();
+
+	void set(FlotonObject* obj, size_t index)
+	{
+		_objects[index].reset(obj);
+	}
+
+	FlotonObjectPtr get(size_t index)
+	{
+		return _objects[index];
+	}
 private:
 	size_t _width;
 	FlotonObjectPtr* _objects;
