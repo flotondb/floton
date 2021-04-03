@@ -13,7 +13,7 @@ public:
 	~FlotonRow();
 private:
 	size_t _width;
-	FlotonShared* _objects;
+	FlotonObjectPtr* _objects;
 };
 
 typedef AtomicShared<FlotonRow> FlotonRowPtr;
