@@ -1,4 +1,4 @@
 # main cmake
 
 add_executable(flotond main.cpp)
-target_link_libraries(flotond flotoncore)
+target_link_libraries(flotond ${FLOTON_STATIC_LIB_NAME})

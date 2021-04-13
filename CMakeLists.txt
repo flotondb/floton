@@ -45,10 +45,13 @@ endif(FEATURE_IS_BIG_ENDIAN)
 # options
 option(WITH_testing "To build and run tests" ON)
 
-if(WITH_testing MATCHES ON)
-    enable_testing()
-endif(WITH_testing MATCHES ON)
-
 include_directories(${PROJECT_SOURCE_DIR}/include)
+set(FLOTON_STATIC_LIB_NAME flotoncore)
 
 add_subdirectory(src)
+
+if(WITH_testing MATCHES ON)
+    enable_testing()
+    message(STATUS "Will build floton tests")
+    add_subdirectory(tests)
+endif(WITH_testing MATCHES ON)

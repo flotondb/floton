@@ -7,6 +7,6 @@ set(FLOTON_SOURCE_FILES
     Rows.cpp
 )
 
-add_library(flotoncore STATIC "${FLOTON_SOURCE_FILES}")
+add_library(${FLOTON_STATIC_LIB_NAME} STATIC "${FLOTON_SOURCE_FILES}")
 
 add_subdirectory(main)
